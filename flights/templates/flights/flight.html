@@ -1,0 +1,36 @@
+{% extends "flights/base.html" %}
+{% block content %}
+    <h1>Flight Info</h1>
+    <h2>Flight Info  : {{flight.id}}</h2>
+    <p>Flight origin: {{flight.origin}}</p>
+    <p>Flight destination: {{flight.destination}}</p>
+    <p>Flight date : {{flight.flydate | date:"d M Y" }}</p>
+    <p>Flight time : {{flight.flydate | time:"H:i"}}</p>
+
+    <p>Duration: {{flight.duration}}</p>
+    {% if flight.duration < 90 %}
+    <p>Snack provided during flight</p>
+    {% elif flight.duration < 300 %}
+    <p>1 Meal provided during flight</p>
+    {% else %}
+    <p>1 Meal and 1 breakfast provided during flight</p>
+    {% endif %}
+
+    <h2>Passenger Info</h2>
+    <ul>
+        {% for passenger in passengers%}
+        <li>{{passenger.first}} {{passenger.last | upper}}</li>
+        {% empty %}
+        <li>No passenger at the moment</li>
+        {% endfor %}
+        <p>Number of passenger: {{passengers | length}}</p>
+    </ul>
+    <hr>
+    <h2>Book this flight</h2>
+    <form action="{%url 'book' flight.id %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="first" placeholder="Enter first name" class="form form-control mb-3">
+        <input type="text" name="last" placeholder="Enter last name" class="form form-control mb-3">
+        <button type="submit" class="btn btn-primary">Book</button>
+    </form>
+{% endblock %}
